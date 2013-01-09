@@ -63,65 +63,46 @@ const CGFloat kBlackoutViewFadeInOpacity = 0.6;
     return self;
 }
 
-- (id)initWithDelegate:(NSObject<RDActionSheetDelegate> *)aDelegate cancelButtonTitle:(NSString *)cancelButtonTitle primaryButtonTitle:(NSString *)primaryButtonTitle destructiveButtonTitle:(NSString *)destructiveButtonTitle otherButtonTitles:(NSString *)otherButtonTitles, ... {
-    
-    self = [self initWithCancelButtonTitle:cancelButtonTitle primaryButtonTitle:primaryButtonTitle destructiveButtonTitle:destructiveButtonTitle otherButtonTitles:otherButtonTitles, nil];
-    
-    if (self) {
-        self.delegate = aDelegate;
-    }
-    
-    return self;
-}
 
-- (id)initWithCancelButtonTitle:(NSString *)cancelButtonTitle primaryButtonTitle:(NSString *)primaryButtonTitle destructiveButtonTitle:(NSString *)destructiveButtonTitle otherButtonTitles:(NSString *)otherButtonTitles, ... {
+- (id)initWithTitle:(NSString *)title cancelButtonTitle:(NSString *)cancelButtonTitle primaryButtonTitle:(NSString *)primaryButtonTitle destructiveButtonTitle:(NSString *)destructiveButtonTitle otherButtonTitles:(NSString *)otherButtonTitles, ... {
     
     self = [self init];
     if (self) {
-        
+        _titleLabel = [self buildTitleLabelWithTitle:title];
+
+
         // Build normal buttons
         va_list argumentList;
         va_start(argumentList, otherButtonTitles);
-        
+
         NSString *argString = otherButtonTitles;
         while (argString != nil) {
-            
+
             UIButton *button = [self buildButtonWithTitle:argString];
             [self.buttons addObject:button];
-            
+
             argString = va_arg(argumentList, NSString *);
         }
-        
+
         va_end(argumentList);
-        
+
         // Build cancel button
         UIButton *cancelButton = [self buildCancelButtonWithTitle:cancelButtonTitle];
         [self.buttons insertObject:cancelButton atIndex:0];
-        
+
         // Add primary button
         if (primaryButtonTitle) {
             UIButton *primaryButton = [self buildPrimaryButtonWithTitle:primaryButtonTitle];
             [self.buttons addObject:primaryButton];
         }
-        
+
         // Add destroy button
         if (destructiveButtonTitle) {
             UIButton *destroyButton = [self buildDestroyButtonWithTitle:destructiveButtonTitle];
             [self.buttons insertObject:destroyButton atIndex:1];
-        }        
+        }
     }
-    
-    return self;
-}
 
-- (id)initWithTitle:(NSString *)title cancelButtonTitle:(NSString *)cancelButtonTitle primaryButtonTitle:(NSString *)primaryButtonTitle destructiveButtonTitle:(NSString *)destructiveButtonTitle otherButtonTitles:(NSString *)otherButtonTitles, ... {
-    
-    self = [self initWithCancelButtonTitle:cancelButtonTitle primaryButtonTitle:primaryButtonTitle destructiveButtonTitle:destructiveButtonTitle otherButtonTitles:otherButtonTitles, nil];
-    
-    if (self) {
-        _titleLabel = [self buildTitleLabelWithTitle:title];
-    }
-    
     return self;
 }
 
